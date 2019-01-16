@@ -14,4 +14,38 @@ class Entity
      end
      entity
    end
+
+   def to_h
+    hash = {}
+    instance_variables.each do |var|
+      hash[var.to_s.delete("@").to_sym] = instance_variable_get(var)
+    end
+    hash
+  end
 end
+
+{
+  'total participants': {
+    'table': 'participations',
+    'attributes': [
+      'id'
+    ],
+    'aggregator': {
+      'count': 'id'
+    }
+  },
+  'total male participants': {
+    'table': 'participations',
+    'attributes': [
+      'id', 'gender'
+    ],
+    'where': {
+      'gender': 'male'
+    },
+    'aggregator': {
+      'count': 'id'
+    }
+  }
+}
+'select count(id) from participations;'
+'select count(id) from participations where gender = "male"'
