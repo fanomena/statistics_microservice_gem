@@ -23,29 +23,3 @@ class Entity
     hash
   end
 end
-
-{
-  'total participants': {
-    'table': 'participations',
-    'attributes': [
-      'id'
-    ],
-    'aggregator': {
-      'count': 'id'
-    }
-  },
-  'total male participants': {
-    'table': 'participations',
-    'attributes': [
-      'id', 'gender'
-    ],
-    'where': {
-      'gender': 'male'
-    },
-    'aggregator': {
-      'count': 'id'
-    }
-  }
-}
-'select count(id) from participations;'
-'select count(id) from participations where gender = "male"'

@@ -13,7 +13,6 @@ module StatisticsClient
     private
 
       def self.send(url, method, params)
-        puts "#{method} #{params}"
         result = HTTParty.send(method.to_s, url, headers: headers, query: params)
         result.parsed_response
       end
@@ -25,7 +24,7 @@ module StatisticsClient
       end
 
       def self.api_url
-        StatisticsClient.api_url
+        StatisticsClient.configuration.api_url
       end
   end
 end

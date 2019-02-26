@@ -1,8 +1,38 @@
 # StatisticsClient
+Run `bin/console` for an interactive shell session.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/statistics_client`. To experiment with that code, run `bin/console` for an interactive prompt.
+# Configuration
+The gem should work by itself out of the box but will allow for additional configuration through the normal initializer configuration flow.
 
-TODO: Delete this and the text above, and describe your gem
+```ruby
+StatisticsClient.configure do |config|
+  config.api_key = 'my-app-key' # Required
+  config.api_url = 'some-url'
+end
+```
+
+# Usage
+The gem is automatically initialized in Rails controllers and views by injecting itself into the helper methods. It can be used anywhere in a controller by using the injected tracker method.
+
+```ruby
+def index
+  tracker.track({
+    name: "CLICK_COUPON",
+    cool: "very",
+    is_optin: true
+  })
+end
+```
+
+The gem only exposes one method for tracking which takes a hash of the event that is being tracked. The event data is arbitrary and can be created during runtime if needed. There's a fixed list of attributes that can be passed within the hash but doing it this way allows us to track events whenever one occurs without building extra implementation details for specific event types.
+
+| Attribute        | Required | Default          | Description                                                                                                  |
+|------------------|----------|------------------|--------------------------------------------------------------------------------------------------------------|
+| name             | Yes      |                  | Used to distinguish different events from each other. Examples: "CLICK_COUPON", "CLICK_CTA", "OPEN_BAG" etc. |
+| happened_at      | No       | Current datetime | Timestamp when the event occured.                                                                            |
+| event_id         | No       |                  | Foreign key to an Eventbaxx event.                                                                           |
+| participation_id | No       |                  | Foreign key to an Eventbaxx participation.                                                                   |
+| lead_id          | No       |                  | Foreign key to a Hileadzz lead.                                                                              |
 
 ## Installation
 
@@ -11,18 +41,6 @@ Add this line to your application's Gemfile:
 ```ruby
 gem 'statistics_client'
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install statistics_client
-
-## Usage
-
-TODO: Write usage instructions here
 
 ## Development
 
