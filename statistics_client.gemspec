@@ -6,11 +6,11 @@ require "statistics_client/version"
 Gem::Specification.new do |spec|
   spec.name          = "statistics_client"
   spec.version       = StatisticsClient::VERSION
-  spec.authors       = ["Mike Zhang"]
-  spec.email         = ["ubik00@yahoo.com"]
+  spec.authors       = ["Rasmus Reiler"]
+  spec.email         = ["rasmus@fanomena.de"]
 
-  spec.summary       = %q{This gem tracks user visits}
-  spec.description   = %q{This gem tracks user visits}
+  spec.summary       = %q{A gem for interacting with the Fanomena statistics service}
+  spec.description   = %q{A gem for interacting with the Fanomena statistics service}
   spec.homepage      = ""
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

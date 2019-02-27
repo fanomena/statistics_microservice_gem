@@ -6,8 +6,8 @@ The gem should work by itself out of the box but will allow for additional confi
 
 ```ruby
 StatisticsClient.configure do |config|
-  config.api_key = 'my-app-key' # Required
-  config.api_url = 'some-url'
+  config.api_key = 'my-api-key' # Required
+  config.api_url = 'some-url'   # Allows overwriting microservice target URL for development purposes
 end
 ```
 

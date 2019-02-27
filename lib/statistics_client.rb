@@ -1,13 +1,14 @@
 require "active_support"
 require "active_support/core_ext"
 require "configuration"
+require "statistics_client/exception"
 require "statistics_client/parser"
 require "statistics_client/validator"
 require "statistics_client/controller"
 require "statistics_client/entity"
 require "statistics_client/version"
 require "statistics_client/tracker"
-require "statistics_client/visit"
+require "statistics_client/session"
 require "statistics_client/client"
 
 module StatisticsClient

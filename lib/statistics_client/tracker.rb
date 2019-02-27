@@ -11,7 +11,8 @@ module StatisticsClient
 
     def track(data)
       validate_api_key_set
-      parsed_data = Parser.parse(data)
+      data        = HashWithIndifferentAccess.new(data)
+      parsed_data = Parser.parse(data, @request)
       # Set happened_at if not set directly in data argument
       byebug
     end
