@@ -3,7 +3,7 @@ module StatisticsClient
     MEMBER_VARIABLES = [
       :participation_id, :event_id, :lead_id, :city, :region, :ip, :os,
       :user_agent, :device_type, :device_name, :screen_height, :screen_width,
-      :browser, :created_at, :updated_at, :referrer, :latitude, :longitude, :tracking_data
+      :browser, :created_at, :updated_at, :referrer, :latitude, :longitude
     ]
 
     MEMBER_VARIABLES.each do |a|
