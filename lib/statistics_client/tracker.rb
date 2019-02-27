@@ -33,7 +33,7 @@ module StatisticsClient
       parsed_data[:session_id] = token
       cookie = {
         value: token,
-        expires: config.cookie_expiration.from_now,
+        expires: config.session_expiration.from_now,
         domain: @request.domain
       }
       @request.cookie_jar[cookie_name] = cookie
