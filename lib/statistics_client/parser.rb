@@ -38,7 +38,6 @@ module StatisticsClient
           data.delete(key)
         end
       end
-      byebug
       return data
     end
 
