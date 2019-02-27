@@ -9,10 +9,5 @@ module StatisticsClient
     MEMBER_VARIABLES.each do |a|
       attr_accessor a
     end
-
-    def self.find(id)
-      # Todo
-      #return from_hash(Client.get("visits/#{id}"))
-    end
   end
 end
