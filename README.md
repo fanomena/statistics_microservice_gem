@@ -15,7 +15,7 @@ end
 ```
 
 # Usage
-The gem is automatically initialized in Rails controllers and views by injecting itself into the helper methods. It can be used anywhere in a controller by using the injected tracker method.
+The gem is automatically initialized in Rails controllers and views by injecting itself into the helper methods.
 
 ```ruby
 def index
@@ -27,7 +27,7 @@ def index
 end
 ```
 
-The gem only exposes one method for tracking which takes a hash of the event that is being tracked. The event data is arbitrary and can be created during runtime if needed. There's a fixed list of attributes that can be passed within the hash but doing it this way allows us to track events whenever one occurs without building extra implementation details for specific event types.
+The gem only exposes one method for tracking which takes a hash of the event that is being tracked. The event data is arbitrary and can be created during runtime if needed. There's a fixed list of primary attributes that may be passed within the hash that allows for relational data aggregation.
 
 | Attribute        | Required | Default          | Description                                                                                                  |
 |------------------|----------|------------------|--------------------------------------------------------------------------------------------------------------|
