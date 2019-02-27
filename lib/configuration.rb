@@ -1,8 +1,11 @@
 class Configuration
-  attr_accessor :api_url, :api_key
+  attr_accessor :api_url, :api_key, :cookie_id, :cookie_expiration, :token_generator
 
   def initialize
-    @api_url = "http://localhost:8000"
-    @api_key = nil
+    @api_url           = "http://localhost:8000"
+    @api_key           = nil
+    @cookie_id         = 'statistics_token'
+    @cookie_expiration = 1.hour
+    @token_generator   = -> { SecureRandom.uuid }
   end
 end
