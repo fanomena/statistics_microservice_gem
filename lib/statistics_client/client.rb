@@ -21,12 +21,17 @@ module StatisticsClient
 
       def self.headers
         {
-          'Content-Type' => "application/json"
+          'Content-Type' => "application/json",
+          'Authorization' => config.api_key
         }
       end
 
       def self.api_url
-        StatisticsClient.configuration.api_url
+        config.api_url
+      end
+
+      def self.config
+        StatisticsClient.configuration
       end
   end
 end
