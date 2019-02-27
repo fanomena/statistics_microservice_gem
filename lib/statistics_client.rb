@@ -8,6 +8,7 @@ require "statistics_client/controller"
 require "statistics_client/entity"
 require "statistics_client/version"
 require "statistics_client/tracker"
+require "statistics_client/event"
 require "statistics_client/session"
 require "statistics_client/client"
 
