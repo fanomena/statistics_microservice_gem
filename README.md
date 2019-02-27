@@ -2,7 +2,7 @@
 Run `bin/console` for an interactive shell session.
 
 # Configuration
-The gem should work by itself out of the box but will allow for additional configuration through the normal initializer configuration flow.
+The gem can be configured through the normal initializer configuration flow. Only the `api_key` needs to be set for the tracker to work.
 
 ```ruby
 StatisticsClient.configure do |config|
