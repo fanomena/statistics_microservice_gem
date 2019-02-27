@@ -1,4 +1,3 @@
-require 'byebug'
 
 module StatisticsClient
   class Tracker
@@ -13,20 +12,49 @@ module StatisticsClient
       validate_api_key_set
       data        = HashWithIndifferentAccess.new(data)
       parsed_data = Parser.parse(data, @request)
-      # Set happened_at if not set directly in data argument
-      byebug
+
+      # Set id of session either from cookie or generate one
+      cookie_name = config.cookie_id
+      if @cookies[cookie_name]
+        parsed_data[:session_id] = @cookies[cookie_name]
+      else
+        set_cookie(cookie_name)
+      end
+
+      # Set happened_at and send parsed event data to microservice
+      parsed_data[:happened_at] ||= DateTime.now
+      post_data(parsed_data)
     end
 
   private
 
-    def send_microservice(visit)
-      Client.post("/visits",visit.to_h)
+    def set_cookie(cookie_name)
+      token                    = generate_token
+      parsed_data[:session_id] = token
+      cookie = {
+        value: token,
+        expires: config.cookie_expiration.from_now,
+        domain: @request.domain
+      }
+      @request.cookie_jar[cookie_name] = cookie
+    end
+
+    def post_data(data)
+      Client.post("data", data)
     end
 
     def validate_api_key_set
-      if StatisticsClient.configuration.nil? || StatisticsClient.configuration.api_key.nil?
+      if config.nil? || config.api_key.nil?
         raise StandardError, "API key must be set before you can start tracking"
       end
+    end
+
+    def generate_token
+      config.token_generator.call
+    end
+
+    def config
+      StatisticsClient.configuration
     end
   end
 end
