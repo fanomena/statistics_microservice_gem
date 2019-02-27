@@ -35,6 +35,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "byebug", "~> 10.0.2"
+  spec.add_dependency "user_agent_parser"
+  spec.add_dependency "geocoder"
+  spec.add_dependency "device_detector"
   spec.add_dependency "httparty", "~> 0.16.0"
 
 end
