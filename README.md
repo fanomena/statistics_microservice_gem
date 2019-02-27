@@ -10,7 +10,7 @@ StatisticsClient.configure do |config|
   config.api_url            = 'some-url'                # Allows overwriting microservice target URL for development purposes
   config.cookie_id          = 'cookie-key-value'        # The ID used used for the cookie containing the session id
   config.session_expiration = 1.hour                    # Time for session to expire
-  config.token_generator    = -> { SecureRandom.uuid }  # Mechanism to use for generating cookie id
+  config.token_generator    = -> { SecureRandom.uuid }  # Mechanism to use for generating session id
 end
 ```
 
