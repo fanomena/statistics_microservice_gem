@@ -11,9 +11,10 @@ module StatisticsClient
       data[:name] = normalize_event_name(data[:name])
 
       # IP/Region/City data - We delete IP due to GDPR
-      if data[:ip]
-        data.merge!(lookup_ip(data[:ip]))
-        data[:ip] = mask_ip(data[:ip])
+      if request.remote_ip
+        ip = mask_ip(request.remote_ip)
+        data.merge!(lookup_ip(ip))
+        data[:ip] = mask_ip(ip)
       end
 
       # Parse user agent into usable device information
