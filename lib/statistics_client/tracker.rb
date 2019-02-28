@@ -39,7 +39,7 @@ module StatisticsClient
     end
 
     def post_data(data)
-      Client.post("data", data)
+      Client.post("events", data)
     end
 
     def validate_api_key_set
