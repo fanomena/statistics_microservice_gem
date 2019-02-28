@@ -1,4 +1,3 @@
-
 module StatisticsClient
   class Tracker
 
@@ -18,7 +17,9 @@ module StatisticsClient
       if @cookies[cookie_name]
         parsed_data[:session_id] = @cookies[cookie_name]
       else
-        set_cookie(cookie_name)
+        token                    = generate_token
+        parsed_data[:session_id] = token
+        set_cookie(cookie_name, token)
       end
 
       # Set happened_at and send parsed event data to microservice
@@ -28,9 +29,7 @@ module StatisticsClient
 
   private
 
-    def set_cookie(cookie_name)
-      token                    = generate_token
-      parsed_data[:session_id] = token
+    def set_cookie(cookie_name, token)
       cookie = {
         value: token,
         expires: config.session_expiration.from_now,

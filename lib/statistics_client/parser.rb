@@ -12,13 +12,13 @@ module StatisticsClient
 
       # IP/Region/City data - We delete IP due to GDPR
       if data[:ip]
-        data.merge(lookup_ip(data[:ip]))
+        data.merge!(lookup_ip(data[:ip]))
         data[:ip] = mask_ip(data[:ip])
       end
 
       # Parse user agent into usable device information
       if request.user_agent
-        data.merge(parse_user_agent(request.user_agent))
+        data.merge!(parse_user_agent(request.user_agent))
       end
 
       # Set referer header if present
@@ -26,7 +26,7 @@ module StatisticsClient
 
       # Gather utm data
       if request.original_url
-        data.merge(utm_properties(request.original_url, request.params))
+        data.merge!(utm_properties(request.original_url, request.params))
       end
 
       # Convert all non-standard fields into tracking_data value

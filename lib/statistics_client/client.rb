@@ -15,8 +15,16 @@ module StatisticsClient
 
       def self.send(path, method, data)
         url    = "#{api_url}/#{path}"
-        result = HTTParty.send(method.to_s, url, headers: headers, query: data)
+        result = nil
+        if method == :post || method == :patch
+          result = HTTParty.send(method.to_s, url, headers: headers, json: data)
+        else
+          result = HTTParty.send(method.to_s, url, headers: headers, query: data)
+        end
         result.parsed_response
+      rescue StandardError
+        # Request didn't make it to service
+        false
       end
 
       def self.headers
