@@ -23,7 +23,7 @@ module StatisticsClient
       end
 
       # Set referer header if present
-      data[:referer] = request.referer if request.referer
+      data[:referrer] = request.referer if request.referer
 
       # Gather utm data
       if request.original_url
@@ -73,6 +73,7 @@ module StatisticsClient
                     "Desktop"
                   end
         {
+          user_agent: user_agent,
           browser: agent.name,
           os: agent.os_name,
           device_type: device_type,
