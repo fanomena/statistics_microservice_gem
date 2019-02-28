@@ -16,8 +16,9 @@ module StatisticsClient
       def self.send(path, method, data)
         url    = "#{api_url}/#{path}"
         result = nil
+        data   = data.to_json
         if method == :post || method == :patch
-          result = HTTParty.send(method.to_s, url, headers: headers, json: data)
+          result = HTTParty.send(method.to_s, url, headers: headers, body: data)
         else
           result = HTTParty.send(method.to_s, url, headers: headers, query: data)
         end
