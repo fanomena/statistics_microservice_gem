@@ -2,7 +2,7 @@ module StatisticsClient
   class Session < ::Entity
     MEMBER_VARIABLES = [
       :participation_id, :event_id, :lead_id, :city, :region, :ip, :os,
-      :user_agent, :device_type, :device_name, :screen_height, :screen_width,
+      :user_agent, :device_type, :device_name, :device_height, :device_width,
       :browser, :created_at, :updated_at, :referrer, :latitude, :longitude
     ]
 
