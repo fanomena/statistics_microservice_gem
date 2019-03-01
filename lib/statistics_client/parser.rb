@@ -8,13 +8,11 @@ module StatisticsClient
     # Parse incoming data and request into useful statistical data
     def self.parse(data, request)
       raise StandardError, "Data is invalid" unless Validator.new(data).valid?
-      data[:name] = normalize_event_name(data[:name])
+      data = sanitize_data(data, request)
 
-      # IP/Region/City data - We delete IP due to GDPR
-      if request.remote_ip
-        ip = mask_ip(request.remote_ip)
-        data.merge!(lookup_ip(ip))
-        data[:ip] = mask_ip(ip)
+      # IP/Region/City data
+      if data[:ip]
+        data.merge!(lookup_ip(data[:ip]))
       end
 
       # Parse user agent into usable device information
@@ -30,18 +28,16 @@ module StatisticsClient
         data.merge!(utm_properties(request.original_url, request.params))
       end
 
-      # Convert all non-standard fields into tracking_data value
-      data[:tracking_data] ||= {}
-      data.each do |key, value|
-        if !Session::MEMBER_VARIABLES.include?(key.to_sym) && !Event::MEMBER_VARIABLES.include?(key.to_sym)
-          data[:tracking_data][key] = value
-          data.delete(key)
-        end
-      end
       return data
     end
 
     private
+
+      def self.sanitize_data(data, request)
+        data[:name] = normalize_event_name(data[:name])
+        data[:ip]   = mask_ip(request.remote_ip)
+        data
+      end
 
       def self.lookup_ip(ip)
         geo_data = Geocoder.search(ip).first
