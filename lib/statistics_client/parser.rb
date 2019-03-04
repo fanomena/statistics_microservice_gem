@@ -11,22 +11,16 @@ module StatisticsClient
       data = sanitize_data(data, request)
 
       # IP/Region/City data
-      if data[:ip]
-        data.merge!(lookup_ip(data[:ip]))
-      end
+      data.merge!(lookup_ip(data[:ip])) if data[:ip]
 
       # Parse user agent into usable device information
-      if request.user_agent
-        data.merge!(parse_user_agent(request.user_agent))
-      end
+      data.merge!(parse_user_agent(request.user_agent)) if request.user_agent
 
       # Set referer header if present
       data[:referrer] = request.referer if request.referer
 
       # Gather utm data
-      if request.original_url
-        data.merge!(utm_properties(request.original_url, request.params))
-      end
+      data.merge!(utm_properties(request.original_url, request.params)) if request.original_url
 
       return data
     end
@@ -52,8 +46,8 @@ module StatisticsClient
       end
 
       def self.parse_user_agent(user_agent)
-        agent   = DeviceDetector.new(user_agent)
-        browser = Browser.new(user_agent)
+        agent       = DeviceDetector.new(user_agent)
+        browser     = Browser.new(user_agent)
         device_type =
                   if browser.bot?
                     "Bot"
@@ -79,12 +73,13 @@ module StatisticsClient
 
       # Gather utm properties from URL
       def self.utm_properties(url, params)
-        landing_uri = Addressable::URI.parse(url) rescue nil
+        landing_uri    = Addressable::URI.parse(url) rescue nil
         landing_params = (landing_uri && landing_uri.query_values) || {}
 
         props = {}
         %w(utm_source utm_medium utm_term utm_content utm_campaign).each do |name|
-          props[name.to_sym] = params[name] || landing_params[name]
+          value              = params[name] || landing_params[name]
+          props[name.to_sym] = value if value
         end
         props
       end
