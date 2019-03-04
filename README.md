@@ -23,6 +23,7 @@ def index
 
   tracker.track({
     name: "CLICK_COUPON",
+    origin: "EVENTBAXX",
     cool: "very",
     is_optin: true
   })
