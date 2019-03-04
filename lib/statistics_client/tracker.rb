@@ -10,6 +10,7 @@ module StatisticsClient
     def track(data)
       validate_api_key_set
       validate_api_url_set
+      validate_origin_set(data[:origin])
       data        = HashWithIndifferentAccess.new(data)
       parsed_data = Parser.parse(data, @request)
 
@@ -41,6 +42,10 @@ module StatisticsClient
 
     def post_data(data)
       Client.post("events", data)
+    end
+
+    def validate_origin_set(origin)
+      raise StandardError, "Origin must be set before you can start tracking" if origin.nil? || origin.empty?
     end
 
     def validate_api_url_set
