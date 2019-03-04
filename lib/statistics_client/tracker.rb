@@ -9,6 +9,7 @@ module StatisticsClient
 
     def track(data)
       validate_api_key_set
+      validate_api_url_set
       data        = HashWithIndifferentAccess.new(data)
       parsed_data = Parser.parse(data, @request)
 
@@ -42,10 +43,12 @@ module StatisticsClient
       Client.post("events", data)
     end
 
+    def validate_api_url_set
+      raise StandardError, "API URL must be set before you can start tracking" if config.nil? || config.api_url.nil?
+    end
+
     def validate_api_key_set
-      if config.nil? || config.api_key.nil?
-        raise StandardError, "API key must be set before you can start tracking"
-      end
+      raise StandardError, "API key must be set before you can start tracking" if config.nil? || config.api_key.nil?
     end
 
     def generate_token
