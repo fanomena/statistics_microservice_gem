@@ -6,11 +6,11 @@ The gem can be configured through the normal initializer configuration flow. Onl
 
 ```ruby
 StatisticsClient.configure do |config|
-  config.api_key            = 'my-api-key'              # Required - Key used for authentication
-  config.api_url            = 'some-url'                # Required - Allows overwriting microservice target URL for development purposes
-  config.cookie_id          = 'cookie-key-value'        # The ID used used for the cookie containing the session id
-  config.session_expiration = 1.hour                    # Time for session to expire
-  config.token_generator    = -> { SecureRandom.uuid }  # Mechanism to use for generating session id
+  config.api_key            = 'a64a3382-8b4d-4890-8a77-9f58488a7b3d' # Required - Key used for authentication
+  config.api_url            = 'some-url'                             # Required - Allows overwriting microservice target URL for development purposes
+  config.cookie_id          = 'cookie-key-value'                     # The ID used used for the cookie containing the session id
+  config.session_expiration = 1.hour                                 # Time for session to expire
+  config.token_generator    = -> { SecureRandom.uuid }               # Mechanism to use for generating session id
 end
 ```
 
