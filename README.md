@@ -14,7 +14,7 @@ StatisticsClient.configure do |config|
 end
 ```
 
-# Usage
+# Usage in controllers
 The gem is automatically initialized in Rails controllers by injecting itself into the helper methods.
 
 ```ruby
@@ -34,10 +34,57 @@ The gem only exposes one method for tracking which takes a hash of the event tha
 | Attribute        | Required | Default          | Description                                                                                                  |
 |------------------|----------|------------------|--------------------------------------------------------------------------------------------------------------|
 | name             | Yes      |                  | Used to distinguish different events from each other. Examples: "CLICK_COUPON", "CLICK_CTA", "OPEN_BAG" etc. |
+| origin           | Yes      |                  | Origin of the tracking. Examples: "EVENTBAXX", "HILEADZZ"                                                    |
 | happened_at      | No       | Current datetime | Timestamp when the event occured.                                                                            |
 | event_id         | No       |                  | Foreign key to an Eventbaxx event.                                                                           |
 | participation_id | No       |                  | Foreign key to an Eventbaxx participation.                                                                   |
 | lead_id          | No       |                  | Foreign key to a Hileadzz lead.                                                                              |
+
+# Usage in JavaScript
+As it's not possible to call Rails controller methods directly from JavaScript because of the frontend/backend separation you will need to use AJAX to call a [predefined controller action](#usage-in-controllers). In JavaScript it is possible to log quite a few more important user details that are recommended to be included in the request.
+
+```javascript
+// Track data in our own microservice.
+// We have to wait some time to generate the fingerprint since some used attributes take time to load (if user has just loaded Eventbaxx)
+setTimeout((function() {
+  Fingerprint2.get(function(components) {
+    var fingerprint, values;
+    values = components.map(function(component) {
+      return component.value;
+    });
+    fingerprint = Fingerprint2.x64hash128(values.join(''), 31);
+    $.ajax({
+      url: '/trackings/microservice',
+      type: 'POST',
+      async: true,
+      data: {
+        advertisement_id: advertisement_id,
+        participation_id: participation_id,
+        name: event_name,
+        event_id: event_id,
+        device_width: document.documentElement.clientWidth,
+        device_height: document.documentElement.clientHeight,
+        origin: 'EVENTBAXX',
+        fingerprint: fingerprint
+      }
+    });
+  });
+}), 50);
+```
+
+In order to generate the fingerprint it's recommended to use [Fingerprint2js](https://github.com/Valve/fingerprintjs2).
+
+| Attribute        | Required | Default          | Description                                                                                                  |
+|------------------|----------|------------------|--------------------------------------------------------------------------------------------------------------|
+| name             | Yes      |                  | Used to distinguish different events from each other. Examples: "CLICK_COUPON", "CLICK_CTA", "OPEN_BAG" etc. |
+| origin           | Yes      |                  | Origin of the tracking. Examples: "EVENTBAXX", "HILEADZZ"                                                    |
+| fingerprint      | No       |                  | Unique fingerprint of user. While not required it is strongly recommended to use!                            |
+| happened_at      | No       | Current datetime | Timestamp when the event occured.                                                                            |
+| event_id         | No       |                  | Foreign key to an Eventbaxx event.                                                                           |
+| participation_id | No       |                  | Foreign key to an Eventbaxx participation.                                                                   |
+| lead_id          | No       |                  | Foreign key to a Hileadzz lead.                                                                              |
+| device_width     | No       |                  | Width of current device                                                                                      |
+| device_height    | No       |                  | Height of current device                                                                                     |
 
 ## Installation
 
