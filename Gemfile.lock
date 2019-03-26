@@ -4,6 +4,7 @@ PATH
     statistics_client (0.1.0)
       device_detector
       geocoder
+      graphql-client
       httparty (~> 0.16.0)
       user_agent_parser
 
@@ -62,6 +63,10 @@ GEM
     geocoder (1.5.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    graphql (1.9.3)
+    graphql-client (0.14.0)
+      activesupport (>= 3.0, < 6.0)
+      graphql (~> 1.6)
     httparty (0.16.4)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
@@ -151,6 +156,7 @@ DEPENDENCIES
   byebug (~> 10.0.2)
   device_detector
   geocoder
+  graphql-client
   httparty (~> 0.16.0)
   rails
   rake (~> 10.0)

@@ -6,7 +6,10 @@ module StatisticsClient
       @cookies    = args[:cookies]
       @request    = args[:request] || @controller.try(:request)
     end
-
+    
+    # Entry point for tracking data to the microservice.
+    # Validate, parse, and transform data into format that is required
+    # by the microservice.
     def track(data)
       validate_api_key_set
       validate_api_url_set
@@ -40,8 +43,15 @@ module StatisticsClient
       @request.cookie_jar[cookie_name] = cookie
     end
 
+    # Use CREATE_EVENT mutation to perform a mutation on the microservice
     def post_data(data)
-      Client.post("events", data)
+      mutation = Mutations::CREATE_EVENT
+      Client.query(mutation, {
+        "sessionId": data[:session_id],
+        "eventInput": {
+          "input": data
+        }
+      })
     end
 
     def validate_origin_set(origin)

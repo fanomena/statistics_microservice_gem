@@ -1,4 +1,8 @@
 # StatisticsClient
+This gem is a wrapper around the the Fanomena Statistics Microservice.
+The gem aims to make it easy for other Fanomena applications to insert and consume data from the microservice.
+Internally it uses the Github GraphQL Ruby client gem to format the requests into valid GraphQL queries.
+
 Run `bin/console` for an interactive shell session.
 
 # Configuration
@@ -32,14 +36,16 @@ end
 
 The gem only exposes one method for tracking which takes a hash of the event that is being tracked. The event data is arbitrary and can be created during runtime if needed. There's a fixed list of primary attributes that may be passed within the hash that allows for relational data aggregation.
 
-| Attribute        | Required | Default          | Description                                                                                                  |
-|------------------|----------|------------------|--------------------------------------------------------------------------------------------------------------|
-| name             | Yes      |                  | Used to distinguish different events from each other. Examples: "CLICK_COUPON", "CLICK_CTA", "OPEN_BAG" etc. |
-| origin           | Yes      |                  | Origin of the tracking. Examples: "EVENTBAXX", "HILEADZZ"                                                    |
-| happened_at      | No       | Current datetime | Timestamp when the event occured.                                                                            |
-| event_id         | No       |                  | Foreign key to an Eventbaxx event.                                                                           |
-| participation_id | No       |                  | Foreign key to an Eventbaxx participation.                                                                   |
-| lead_id          | No       |                  | Foreign key to a Hileadzz lead.                                                                              |
+| Attribute                 | Required | Default          | Description                                                                                                  |
+|---------------------------|----------|------------------|--------------------------------------------------------------------------------------------------------------|
+| name                      | Yes      |                  | Used to distinguish different events from each other. Examples: "CLICK_COUPON", "CLICK_CTA", "OPEN_BAG" etc. |
+| origin                    | Yes      |                  | Origin of the tracking. Examples: "EVENTBAXX", "HILEADZZ"                                                    |
+| eventbaxx_organization_id | No       |                  | Foreign key to an Eventbaxx organization. Either this or Hileadzz MUST be set!                               |
+| hileadzz_organization_id  | No       |                  | Foreign key to a Hileadzz organization. Either this or Eventbaxx MUST be set!                                |
+| happened_at               | No       | Current datetime | Timestamp when the event occured.                                                                            |
+| event_id                  | No       |                  | Foreign key to an Eventbaxx event.                                                                           |
+| participation_id          | No       |                  | Foreign key to an Eventbaxx participation.                                                                   |
+| lead_id                   | No       |                  | Foreign key to a Hileadzz lead.                                                                              |
 
 # Usage in JavaScript
 As it's not possible to call Rails controller methods directly from JavaScript because of the frontend/backend separation you will need to use AJAX to call a [predefined controller action](#usage-in-controllers). In JavaScript it is possible to log quite a few more important user details that are recommended to be included in the request.

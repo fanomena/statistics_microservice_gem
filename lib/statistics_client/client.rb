@@ -1,46 +1,56 @@
-require 'httparty'
-
+# Handle all outbound HTTP actions to the microservice API
 module StatisticsClient
   class Client
+    class QueryError < StandardError; end
 
-    def self.get(path, data={})
-      send(path, :get, data)
+    class << self
+      attr_accessor :client
     end
 
-    def self.post(path, data)
-      send(path, :post, data)
+    # definition - Mutation or Query from ::Mutations or ::Queries
+    #
+    # Returns a structured query result or raises if the request failed.
+    def self.query(definition, variables = {})
+      response = self.client.query(definition, variables: variables, context: client_context)
+
+      if response.errors.any?
+        raise QueryError.new(response.errors[:data].join(", "))
+      else
+        response.data
+      end
     end
 
-    private
-
-      def self.send(path, method, data)
-        url    = "#{api_url}/#{path}"
-        result = nil
-        data   = data.to_json
-        if method == :post || method == :patch
-          result = HTTParty.send(method.to_s, url, headers: headers, body: data)
-        else
-          result = HTTParty.send(method.to_s, url, headers: headers, query: data)
+    # Configures the GraphQL client used to query the microservice.
+    # This NEEDS to be run AFTER the configuration is correctly setup for StatisticsClient
+    # as it needs to use the configuration to fetch the correct api_url.
+    def self.configure_client
+      http = GraphQL::Client::HTTP.new("#{StatisticsClient.configuration.api_url}/graphql") do
+        def headers(context)
+          {
+            'Content-Type' => "application/json",
+            'Authorization' => StatisticsClient.configuration.api_key
+          }
         end
-        result.parsed_response
-      rescue StandardError
-        # Request didn't make it to service
-        false
       end
+      # Fetch latest schema on init, this will make a network request
+      schema = GraphQL::Client.load_schema(http)
+      # TODO: Dump schema
+      # However, it's smart to dump this to a JSON file and load from disk
+      #
+      # Run it from a script or rake task
+      #   GraphQL::Client.dump_schema(SWAPI::HTTP, "path/to/schema.json")
+      #
+      # Schema = GraphQL::Client.load_schema("path/to/schema.json")
+      
+      self.client = GraphQL::Client.new(schema: schema, execute: http)
+      StatisticsClient.require_queries
+    end
 
-      def self.headers
-        {
-          'Content-Type' => "application/json",
-          'Authorization' => config.api_key
-        }
-      end
-
-      def self.api_url
-        config.api_url
-      end
-
-      def self.config
-        StatisticsClient.configuration
-      end
+    def self.client_context
+      {
+        'Content-Type' => "application/json",
+        'Authorization' => StatisticsClient.configuration.api_key
+      }
+    end
   end
 end

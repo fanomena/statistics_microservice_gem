@@ -1,3 +1,5 @@
+require "graphql/client"
+require "graphql/client/http"
 require "active_support"
 require "active_support/core_ext"
 require "configuration"
@@ -20,9 +22,16 @@ module StatisticsClient
   def self.configure
     self.configuration ||= Configuration.new
     yield(configuration)
+    Client.configure_client
+  end
+
+  def self.require_queries
+    # Require all mutations and queries after the client is setup
+    Dir[File.dirname(__FILE__) + "/statistics_client/queries/*.rb"].each {|file| require file }
   end
 end
 
+# Hook into Rails controllers
 ActiveSupport.on_load(:action_controller) do
   include StatisticsClient::Controller
 end
