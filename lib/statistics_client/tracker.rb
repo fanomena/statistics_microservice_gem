@@ -11,9 +11,6 @@ module StatisticsClient
     # Validate, parse, and transform data into format that is required
     # by the microservice.
     def track(data)
-      validate_api_key_set
-      validate_api_url_set
-      validate_origin_set(data[:origin])
       data        = HashWithIndifferentAccess.new(data)
       parsed_data = Parser.parse(data, @request)
 
@@ -32,46 +29,34 @@ module StatisticsClient
       post_data(parsed_data)
     end
 
-  private
+    private
 
-    def set_cookie(cookie_name, token)
-      cookie = {
-        value: token,
-        expires: config.session_expiration.from_now,
-        domain: @request.domain
-      }
-      @request.cookie_jar[cookie_name] = cookie
-    end
-
-    # Use CREATE_EVENT mutation to perform a mutation on the microservice
-    def post_data(data)
-      mutation = Mutations::CREATE_EVENT
-      Client.query(mutation, {
-        "sessionId": data[:session_id],
-        "eventInput": {
-          "input": data
+      def set_cookie(cookie_name, token)
+        cookie = {
+          value: token,
+          expires: config.session_expiration.from_now,
+          domain: @request.domain
         }
-      })
-    end
+        @request.cookie_jar[cookie_name] = cookie
+      end
 
-    def validate_origin_set(origin)
-      raise StandardError, "Origin must be set before you can start tracking" if origin.nil? || origin.empty?
-    end
+      # Use CREATE_EVENT mutation to perform a mutation on the microservice
+      def post_data(data)
+        mutation = Mutations::CREATE_EVENT
+        Client.query(mutation, {
+          "sessionId": data[:session_id],
+          "eventInput": {
+            "input": data
+          }
+        })
+      end
 
-    def validate_api_url_set
-      raise StandardError, "API URL must be set before you can start tracking" if config.nil? || config.api_url.nil?
-    end
+      def generate_token
+        config.token_generator.call
+      end
 
-    def validate_api_key_set
-      raise StandardError, "API key must be set before you can start tracking" if config.nil? || config.api_key.nil?
+      def config
+        StatisticsClient.configuration
+      end
     end
-
-    def generate_token
-      config.token_generator.call
-    end
-
-    def config
-      StatisticsClient.configuration
-    end
-  end
 end

@@ -7,7 +7,7 @@ module StatisticsClient
 
     # Parse incoming data and request into useful statistical data
     def self.parse(data, request)
-      raise StandardError, "Data is invalid" unless Validator.new(data).valid?
+      Validator.new(data).valid?
       data = sanitize_data(data, request)
 
       # IP/Region/City data
