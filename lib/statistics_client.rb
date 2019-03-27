@@ -23,6 +23,7 @@ module StatisticsClient
     self.configuration ||= Configuration.new
     yield(configuration)
     Client.configure_client
+    StatisticsClient.require_queries
   end
 
   def self.require_queries

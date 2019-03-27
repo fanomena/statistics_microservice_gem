@@ -43,7 +43,6 @@ module StatisticsClient
       # Schema = GraphQL::Client.load_schema("path/to/schema.json")
       
       self.client = GraphQL::Client.new(schema: schema, execute: http)
-      StatisticsClient.require_queries
     end
 
     def self.client_context
