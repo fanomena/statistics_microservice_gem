@@ -1,7 +1,7 @@
 require 'geocoder'
 require 'user_agent_parser'
 require 'device_detector'
-require 'byebug'
+
 module StatisticsClient
   module Parser
 
