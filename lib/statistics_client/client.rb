@@ -1,7 +1,7 @@
 # Handle all outbound HTTP actions to the microservice API
 module StatisticsClient
   class Client
-    class QueryError < StandardError; end
+    QueryError = Class.new(StandardError)
 
     class << self
       attr_accessor :client

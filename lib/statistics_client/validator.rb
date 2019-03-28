@@ -3,7 +3,7 @@
 # understand that it's a validation error
 module StatisticsClient
   class Validator
-    class ValidationError < StandardError; end
+    ValidationError = Class.new(StandardError)
 
     def initialize(data)
       @data = data
