@@ -11,17 +11,18 @@ module StatisticsClient
     # Validate, parse, and transform data into format that is required
     # by the microservice.
     def track(data)
-      data        = HashWithIndifferentAccess.new(data)
-      parsed_data = Parser.parse(data, @request)
+      data          = HashWithIndifferentAccess.new(data)
+      data[:origin] = config.origin unless data[:origin]
+      parsed_data   = Parser.parse(data, @request)
 
       # Set id of session either from cookie or generate one
       cookie_name = config.cookie_id
-      if @cookies[cookie_name]
+      if @cookies && @cookies[cookie_name]
         parsed_data[:session_id] = @cookies[cookie_name]
       else
         token                    = generate_token
         parsed_data[:session_id] = token
-        set_cookie(cookie_name, token)
+        set_cookie(cookie_name, token) if @cookies
       end
 
       # Set happened_at and send parsed event data to microservice

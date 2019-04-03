@@ -8,6 +8,9 @@ module StatisticsClient
     # Parse incoming data and request into useful statistical data
     def self.parse(data, request)
       Validator.new(data).valid?
+
+      # Nothing to parse if request is not present
+      return data unless request
       data = sanitize_data(data, request)
 
       # IP/Region/City data
