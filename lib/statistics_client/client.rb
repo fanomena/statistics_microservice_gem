@@ -41,7 +41,7 @@ module StatisticsClient
       rescue Exception => e
         # No connection can be made
         self.client = nil
-        return
+        return nil
       end
       # TODO: Dump schema
       # However, it's smart to dump this to a JSON file and load from disk
@@ -52,6 +52,7 @@ module StatisticsClient
       # Schema = GraphQL::Client.load_schema("path/to/schema.json")
       
       self.client = GraphQL::Client.new(schema: schema, execute: http)
+      return self.client
     end
 
     def self.client_context

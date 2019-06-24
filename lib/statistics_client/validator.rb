@@ -10,6 +10,7 @@ module StatisticsClient
     end
 
     def valid?
+      validate_client_setup
       validate_api_key_set
       validate_api_url_set
       validate_origin_set
@@ -18,6 +19,11 @@ module StatisticsClient
     end
 
     private
+
+      # Validate that GraphQL client is properly setup
+      def validate_client_setup
+        raise ValidationError.new("GraphQL client was not properly setup or cannot connect.") unless Client.client
+      end
 
       def validate_name_is_set
         raise ValidationError.new("Required name variable is not present in tracking data") unless @data.has_key?(:name) && @data[:name]
