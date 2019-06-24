@@ -40,7 +40,7 @@ module StatisticsClient
         schema = GraphQL::Client.load_schema(http)
       rescue Exception => e
         # No connection can be made
-        self.client = null
+        self.client = nil
         return
       end
       # TODO: Dump schema
