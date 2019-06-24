@@ -16,7 +16,10 @@ module StatisticsClient
       if response.errors.any?
         raise QueryError.new(response.errors[:data].join(", "))
       else
-        response.data
+        data = response.data.to_h
+        data = data.transform_keys {|k| k.underscore} if defined?(Rails)
+        data = HashWithIndifferentAccess.new(data) if defined?(Rails)
+        data
       end
     end
 
@@ -33,7 +36,13 @@ module StatisticsClient
         end
       end
       # Fetch latest schema on init, this will make a network request
-      schema = GraphQL::Client.load_schema(http)
+      begin
+        schema = GraphQL::Client.load_schema(http)
+      rescue Exception => e
+        # No connection can be made
+        self.client = null
+        return
+      end
       # TODO: Dump schema
       # However, it's smart to dump this to a JSON file and load from disk
       #
