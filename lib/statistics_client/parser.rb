@@ -38,10 +38,14 @@ module StatisticsClient
 
       def self.lookup_ip(ip)
         geo_data = Geocoder.search(ip).first
-        {
-          region: geo_data.region,
-          city: geo_data.city
-        }
+        if geo_data
+          return {
+            region: geo_data.region,
+            city: geo_data.city
+          }
+        else
+          return {}
+        end
       end
 
       def self.normalize_event_name(name)
