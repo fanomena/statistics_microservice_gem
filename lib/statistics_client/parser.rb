@@ -32,7 +32,12 @@ module StatisticsClient
 
       def self.sanitize_data(data, request)
         data[:name] = normalize_event_name(data[:name])
-        data[:ip]   = mask_ip(request.remote_ip)
+        data[:ip]   = 
+                  if defined?(request.remote_ip)
+                    mask_ip(request.remote_ip)
+                  else
+                    mask_ip(request.ip)
+                  end
         data
       end
 
