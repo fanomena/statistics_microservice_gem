@@ -1,3 +1,5 @@
+require 'uri'
+
 module StatisticsClient
   class Tracker
 
@@ -33,12 +35,13 @@ module StatisticsClient
     private
 
       def set_cookie(cookie_name, token)
-        cookie = {
-          value: token,
-          expires: config.session_expiration.from_now,
-          domain: @request.domain
-        }
-        @request.cookie_jar[cookie_name] = cookie
+        domain = defined?(@request.domain) && @request.domain ? @request.domain : URI.parse(@request.headers['Origin']).host
+
+        if defined?(@request.cookie_jar)
+          @request.cookie_jar[cookie_name] = @cookie
+        else
+          @request.cookies[cookie_name] = @cookie
+        end
       end
 
       # Use CREATE_EVENT mutation to perform a mutation on the microservice

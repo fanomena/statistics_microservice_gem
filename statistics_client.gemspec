@@ -39,4 +39,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "geocoder"
   spec.add_dependency "device_detector"
   spec.add_dependency "graphql-client"
+  spec.add_dependency "browser"
 end
