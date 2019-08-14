@@ -1,6 +1,7 @@
 require 'geocoder'
 require 'user_agent_parser'
 require 'device_detector'
+require 'browser'
 
 module StatisticsClient
   module Parser
@@ -23,7 +24,15 @@ module StatisticsClient
       data[:referrer] = request.referer if request.referer
 
       # Gather utm data
-      data.merge!(utm_properties(request.original_url, request.params)) if request.original_url
+      url =
+          if defined?(request.original_url) && request.original_url
+            request.original_url
+          elsif request.url 
+            request.url
+          else
+            nil
+          end
+      data.merge!(utm_properties(url, request.params)) if  url
 
       return data
     end
@@ -59,7 +68,7 @@ module StatisticsClient
 
       def self.parse_user_agent(user_agent)
         agent       = DeviceDetector.new(user_agent)
-        browser     = Browser.new(user_agent)
+        browser     = Browser.new(user_agent, accept_language: "en-us")
         device_type =
                   if browser.bot?
                     "Bot"
@@ -79,7 +88,7 @@ module StatisticsClient
           browser: agent.name,
           os: agent.os_name,
           device_type: device_type,
-          device_name: agent.device_name
+          device_name: agent.device_name,
         }
       end
 
