@@ -8,4 +8,17 @@ class Mutations
       }
     }
   GRAPHQL
+
+  # Generate an API key
+  GENERATE_API_KEY = StatisticsClient::Client.client.parse <<-'GRAPHQL'
+    mutation(
+      $organizationId: Int!
+    ) {
+      generateKey(organizationId: $organizationId) {
+        key
+        origin
+        organization_id
+      }
+    }
+  GRAPHQL
 end

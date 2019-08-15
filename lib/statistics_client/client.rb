@@ -10,8 +10,12 @@ module StatisticsClient
     # definition - Mutation or Query from ::Mutations or ::Queries
     #
     # Returns a structured query result or raises if the request failed.
-    def self.query(definition, variables = {})
-      response = self.client.query(definition, variables: variables, context: client_context)
+    def self.query(definition, api_key, variables = {})
+      if !api_key
+        raise QueryError.new('No API key specified!')
+      end
+
+      response = self.client.query(definition, variables: variables, context: client_context(api_key))
 
       if response.errors.any?
         raise QueryError.new(response.errors[:data].join(", "))
@@ -55,10 +59,10 @@ module StatisticsClient
       return self.client
     end
 
-    def self.client_context
+    def self.client_context(api_key)
       {
         'Content-Type' => "application/json",
-        'Authorization' => StatisticsClient.configuration.api_key
+        'Authorization' => api_key
       }
     end
   end
