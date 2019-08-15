@@ -10,12 +10,12 @@ The gem can be configured through the normal initializer configuration flow. Onl
 
 ```ruby
 StatisticsClient.configure do |config|
-  config.api_key            = 'a64a3382-8b4d-4890-8a77-9f58488a7b3d' # Required - Key used for authentication
+  config.master_api_key     = ENV['MASTER_STATISTIXX_KEY']           # Required - Key used for authentication when generating API keys
   config.api_url            = 'some-url'                             # Required - Allows overwriting microservice target URL for development purposes
   config.cookie_id          = 'cookie-key-value'                     # The ID used used for the cookie containing the session id
   config.session_expiration = 1.hour                                 # Time for session to expire
   config.token_generator    = -> { SecureRandom.uuid }               # Mechanism to use for generating session id
-  config.origin             = 'EVENTBAXX"                            # Automatically sets ORIGIN
+  config.origin             = 'EVENTBAXX'                            # Automatically sets ORIGIN
 end
 ```
 
@@ -28,6 +28,14 @@ bundle config local.statistics_client /path/to/gem
 ```
 
 # Usage
+## Generating API keys
+In order to generate an API key for an organization you must call the following method.
+It will return the key. Only one key can exist for an organization at any given time.
+```ruby
+StatisticsClient::ApiKey.generate(organization_id)
+```
+
+## Tracking
 A standard tracker object can be initialized within any Ruby code as long as the configuration parameters have been correctly set.
 
 ```ruby
@@ -37,7 +45,7 @@ tracker.track({
 })
 ```
 
-# Usage in controllers
+### In controllers
 The gem is automatically initialized in Rails controllers by injecting itself into the helper methods.
 
 ```ruby
@@ -66,7 +74,7 @@ The gem only exposes one method for tracking which takes a hash of the event tha
 | participation_id          | No       |                  | Foreign key to an Eventbaxx participation.                                                                   |
 | lead_id                   | No       |                  | Foreign key to a Hileadzz lead.                                                                              |
 
-# Usage in JavaScript
+### In JavaScript
 As it's not possible to call Rails controller methods directly from JavaScript because of the frontend/backend separation you will need to use AJAX to call a [predefined controller action](#usage-in-controllers). In JavaScript it is possible to log quite a few more important user details that are recommended to be included in the request.
 
 ```javascript
