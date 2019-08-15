@@ -36,11 +36,16 @@ module StatisticsClient
 
       def set_cookie(cookie_name, token)
         domain = defined?(@request.domain) && @request.domain ? @request.domain : URI.parse(@request.headers['Origin']).host
+        cookie = {
+          value: token,
+          expires: config.session_expiration.from_now,
+          domain: domain
+        }
 
         if defined?(@request.cookie_jar)
-          @request.cookie_jar[cookie_name] = @cookie
+          @request.cookie_jar[cookie_name] = cookie
         else
-          @request.cookies[cookie_name] = @cookie
+          @request.cookies[cookie_name] = cookie
         end
       end
 
