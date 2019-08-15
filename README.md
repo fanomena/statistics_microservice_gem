@@ -19,6 +19,14 @@ StatisticsClient.configure do |config|
 end
 ```
 
+# Local development
+To develop on the gem locally while testing changes in an app it's possible to override bundler's local gem path to specify that you want to use a local gem over the one defined on Github.
+To do so run the following command in your console.
+
+```bash
+bundle config local.statistics_client /path/to/gem
+```
+
 # Usage
 A standard tracker object can be initialized within any Ruby code as long as the configuration parameters have been correctly set.
 
