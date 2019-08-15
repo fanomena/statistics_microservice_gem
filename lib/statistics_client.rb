@@ -3,7 +3,6 @@ require "graphql/client/http"
 require "active_support"
 require "active_support/core_ext"
 require "configuration"
-require "statistics_client/api_key"
 require "statistics_client/parser"
 require "statistics_client/validator"
 require "statistics_client/controller"
@@ -13,6 +12,7 @@ require "statistics_client/tracker"
 require "statistics_client/event"
 require "statistics_client/session"
 require "statistics_client/client"
+require "statistics_client/api_key"
 
 module StatisticsClient
   class << self
