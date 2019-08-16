@@ -40,9 +40,9 @@ A standard tracker object can be initialized within any Ruby code as long as the
 
 ```ruby
 tracker = StatisticsClient::Tracker.new
-tracker.track(api_key, {
+tracker.track({
   name: "MY_EVENT"
-})
+}, api_key)
 ```
 
 ### In controllers
@@ -52,12 +52,12 @@ The gem is automatically initialized in Rails controllers by injecting itself in
 def index
   # Your code ...
 
-  tracker.track(api_key, {
+  tracker.track({
     name: "CLICK_COUPON",
     origin: "EVENTBAXX",
     cool: "very",
     is_optin: true
-  })
+  }, api_key)
 end
 ```
 
