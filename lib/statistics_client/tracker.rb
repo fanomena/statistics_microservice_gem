@@ -12,7 +12,7 @@ module StatisticsClient
     # Entry point for tracking data to the microservice.
     # Validate, parse, and transform data into format that is required
     # by the microservice.
-    def track(data)
+    def track(data, api_key)
       data          = HashWithIndifferentAccess.new(data)
       data[:origin] = config.origin unless data[:origin]
       parsed_data   = Parser.parse(data, @request)
@@ -29,7 +29,7 @@ module StatisticsClient
 
       # Set happened_at and send parsed event data to microservice
       parsed_data[:happened_at] ||= DateTime.now
-      post_data(parsed_data)
+      post_data(parsed_data, api_key)
     end
 
     private
@@ -50,9 +50,9 @@ module StatisticsClient
       end
 
       # Use CREATE_EVENT mutation to perform a mutation on the microservice
-      def post_data(data)
+      def post_data(data, api_key)
         mutation = Mutations::CREATE_EVENT
-        Client.query(mutation, {
+        Client.query(mutation, api_key, {
           "sessionId": data[:session_id],
           "eventInput": {
             "input": data

@@ -35,7 +35,7 @@ module StatisticsClient
         def headers(context)
           {
             'Content-Type' => "application/json",
-            'Authorization' => StatisticsClient.configuration.master_api_key
+            'Authorization' => context[:api_key]
           }
         end
       end
@@ -61,8 +61,7 @@ module StatisticsClient
 
     def self.client_context(api_key)
       {
-        'Content-Type' => "application/json",
-        'Authorization' => api_key
+        api_key: api_key
       }
     end
   end

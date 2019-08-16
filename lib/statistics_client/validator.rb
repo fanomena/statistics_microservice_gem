@@ -11,7 +11,6 @@ module StatisticsClient
 
     def valid?
       validate_client_setup
-      validate_api_key_set
       validate_api_url_set
       validate_origin_set
       validate_name_is_set
@@ -35,10 +34,6 @@ module StatisticsClient
 
       def validate_api_url_set
         raise ValidationError.new("API URL must be set before you can start tracking") if config.nil? || config.api_url.nil?
-      end
-
-      def validate_api_key_set
-        raise ValidationError.new("API key must be set before you can start tracking") if config.nil? || config.api_key.nil?
       end
 
       def config
