@@ -42,7 +42,7 @@ A standard tracker object can be initialized within any Ruby code as long as the
 tracker = StatisticsClient::Tracker.new
 tracker.track({
   name: "MY_EVENT"
-})
+}, api_key)
 ```
 
 ### In controllers
@@ -57,7 +57,7 @@ def index
     origin: "EVENTBAXX",
     cool: "very",
     is_optin: true
-  })
+  }, api_key)
 end
 ```
 
