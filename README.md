@@ -67,8 +67,7 @@ The gem only exposes one method for tracking which takes a hash of the event tha
 |---------------------------|----------|------------------|--------------------------------------------------------------------------------------------------------------|
 | name                      | Yes      |                  | Used to distinguish different events from each other. Examples: "CLICK_COUPON", "CLICK_CTA", "OPEN_BAG" etc. |
 | origin                    | Yes      |                  | Origin of the tracking. Examples: "EVENTBAXX", "HILEADZZ"                                                    |
-| eventbaxx_organization_id | No       |                  | Foreign key to an Eventbaxx organization. Either this or Hileadzz MUST be set!                               |
-| hileadzz_organization_id  | No       |                  | Foreign key to a Hileadzz organization. Either this or Eventbaxx MUST be set!                                |
+| organization_id           | Yes      |                  | Foreign key to an organization.                                                                              |
 | happened_at               | No       | Current datetime | Timestamp when the event occured.                                                                            |
 | event_id                  | No       |                  | Foreign key to an Eventbaxx event.                                                                           |
 | participation_id          | No       |                  | Foreign key to an Eventbaxx participation.                                                                   |
