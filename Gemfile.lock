@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    statistics_client (0.1.7)
+    statistics_client (0.1.7.5)
       browser
       device_detector
       geocoder
